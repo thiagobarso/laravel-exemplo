@@ -34,6 +34,6 @@ class ProdutoController extends Controller {
                 array($nome,$quantidade,$valor, $descricao));
 
 
-        return view('adicionado')-with('nome', 'Frigobar');
+        return view('adicionado')->with('nome', $nome);
     }
 }
