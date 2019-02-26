@@ -28,6 +28,14 @@
 </table>
 @endif
 
+@if(old('nome'))
+	<div class="alert alert-success">
+		<strong>Sucesso!</strong> 
+		O produto {{old('nome')}} adicionado com sucesso!	
+	</div>	
+@endif
+
+
 <h4>
   <span class="label label-danger pull-right">
     Um ou menos itens no estoque
