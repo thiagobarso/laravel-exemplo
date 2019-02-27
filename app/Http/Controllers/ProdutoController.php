@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\DB;
 use Request;
 use Validator;
 use App\Produto;
+use App\Categoria;
 use App\Http\Requests\ProdutoRequest;
 use Auth;
 
@@ -29,7 +30,7 @@ class ProdutoController extends Controller {
     }
 
     public function novo(){
-        return view('produto.formulario');
+        return view('produto.formulario')->with('categorias', Categoria::all());
     }
 
     public function adiciona(ProdutoRequest $request){
