@@ -2,20 +2,21 @@
 
 use Illuminate\Support\Facades\DB;
 use Request;
+use App\Produto;
 
 class ProdutoController extends Controller {
 
     public function lista(){
 
-        $produtos = DB::select('select * from produtos');
+        $produtos = Produto::all();
         return view('produto.listagem')->with('produtos', $produtos);
     }
 
     public function mostra(){
         //$id= Request::input('id');
         $id= Request::route('id');
-        $produto = DB::select('select * from produtos where id = ? ',  [$id]);
-        return view('produto.detalhes')->with('p', $produto[0]);
+        $produto = Produto::find($id);
+        return view('produto.detalhes')->with('p', $produto);
     }
 
     public function novo(){
@@ -24,14 +25,15 @@ class ProdutoController extends Controller {
 
     public function adiciona(){
 
+        $produto = new Produto();
+
         //pegar as informações do Formulario
-        $nome = Request::input('nome');
-        $quantidade = Request::input('quantidade');
-        $valor = Request::input('valor');
-        $descricao = Request::input('descricao');
+        $produto->nome = Request::input('nome');
+        $produto->quantidade = Request::input('quantidade');
+        $produto->valor = Request::input('valor');
+        $produto->descricao = Request::input('descricao');
         //salvar no Banco
-        DB::insert('insert into produtos (nome, quantidade, valor, descricao) values (?,?,?,?)',
-                array($nome,$quantidade,$valor, $descricao));
+        $produto->save();
 
         return redirect('/produtos')->withInput(Request::only('nome'));
     }
