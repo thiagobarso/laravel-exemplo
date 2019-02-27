@@ -19,7 +19,7 @@
 		<td>{{$p->descricao}}</td>
 		<td>{{$p->quantidade}}</td>	
 		<td>{{$p->tamanho}}</td>	
-		<td>{{$p->categoria->nome}}</td>	
+		<td>{{$p->categoria->nome or ''}}</td>	
 		<td>
 			<a href="/produtos/mostra/{{$p->id}} ">
 				<span class="glyphicon glyphicon-search"></span>
