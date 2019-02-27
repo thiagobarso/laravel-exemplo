@@ -4,8 +4,16 @@ use Illuminate\Support\Facades\DB;
 use Request;
 use Validator;
 use App\Produto;
+use App\Http\Requests\ProdutoRequest;
+use Auth;
 
 class ProdutoController extends Controller {
+
+    public function __construct(){
+        $this->middleware('autorizador', 
+        ['only' => ['adiciona', 'remove', 'novo']]);
+    }
+
 
     public function lista(){
 
@@ -24,20 +32,10 @@ class ProdutoController extends Controller {
         return view('produto.formulario');
     }
 
-    public function adiciona(){
+    public function adiciona(ProdutoRequest $request){
 
-        $validator = Validator::make(
-            ['nome' => Request::input('nome')],
-            ['nome' => 'required|min:3']
-        );
 
-        if($validator->fails()){
-            $msgs = $validator->messages();
-            dd($msgs);
-            return redirect('/produtos/novo');
-        }
-
-        Produto::create(Request::all());
+        Produto::create($request->all());
 
         return redirect()->action('ProdutoController@lista')->withInput(Request::only('nome'));
     }
