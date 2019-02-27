@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\DB;
 use Request;
+use Validator;
 use App\Produto;
 
 class ProdutoController extends Controller {
@@ -12,34 +13,45 @@ class ProdutoController extends Controller {
         return view('produto.listagem')->with('produtos', $produtos);
     }
 
-    public function mostra(){
+    public function mostra($id){
         //$id= Request::input('id');
-        $id= Request::route('id');
+        // $id= Request::route('id');
         $produto = Produto::find($id);
         return view('produto.detalhes')->with('p', $produto);
     }
 
     public function novo(){
-        return view('formulario');
+        return view('produto.formulario');
     }
 
     public function adiciona(){
 
-        $produto = new Produto();
+        $validator = Validator::make(
+            ['nome' => Request::input('nome')],
+            ['nome' => 'required|min:3']
+        );
 
-        //pegar as informações do Formulario
-        $produto->nome = Request::input('nome');
-        $produto->quantidade = Request::input('quantidade');
-        $produto->valor = Request::input('valor');
-        $produto->descricao = Request::input('descricao');
-        //salvar no Banco
-        $produto->save();
+        if($validator->fails()){
+            $msgs = $validator->messages();
+            dd($msgs);
+            return redirect('/produtos/novo');
+        }
 
-        return redirect('/produtos')->withInput(Request::only('nome'));
+        Produto::create(Request::all());
+
+        return redirect()->action('ProdutoController@lista')->withInput(Request::only('nome'));
     }
 
     public function listaJson() {
         $produtos = DB::select('select * from produtos');
         return response()->json($produtos);
+    }
+
+    public function remove($id){
+        // $id = Request::route($id);
+        $produto = Produto::find($id);
+        $produto->delete();
+        // return redirect('/produtos');
+        return redirect()->action('ProdutoController@lista');
     }
 }

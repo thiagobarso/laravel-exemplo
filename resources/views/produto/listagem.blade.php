@@ -3,7 +3,7 @@
 @section('conteudo')
 <h1>Listagem de Produtos</h1>
 
-@if(empty($produtos))
+@if($produtos->isEmpty())
 
 <div class="alert alert-danger">
   Você não tem nenhum produto cadastrado.
@@ -18,9 +18,15 @@
 		<td>R$ {{$p->valor}}</td>
 		<td>{{$p->descricao}}</td>
 		<td>{{$p->quantidade}}</td>	
+		<td>{{$p->tamanho}}</td>	
 		<td>
 			<a href="/produtos/mostra/{{$p->id}} ">
 				<span class="glyphicon glyphicon-search"></span>
+			</a>
+		</td>
+		<td>
+			<a href="{{action('ProdutoController@remove', $p->id)}}">
+				<span class="glyphicon glyphicon-trash"></span>
 			</a>
 		</td>
 	</tr>
